@@ -1,0 +1,2 @@
+# OpenCL-Exercises
+Sample exercises.
