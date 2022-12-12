@@ -28,12 +28,12 @@ int main(void)
 
 	cl_mem mem_obj1 = NULL, mem_obj2 = NULL, mem_obj3 = NULL, mem_obj4 = NULL;
 	char* file_buffer_mult = NULL, * file_buffer_transpose = NULL;
+	cl_int err_code = CL_SUCCESS, err_code_finish = CL_SUCCESS;
 	cl_program program = NULL, program_transpose = NULL;
 	cl_kernel kernel = NULL, kernel_transpose = NULL;
 	cl_command_queue* command_queue = NULL;
 	cl_platform_id* platforms_arr = NULL;
 	cl_device_id* devices_arr = NULL;
-	cl_int err_code = CL_SUCCESS;
 	cl_context context = NULL;
 
 	initialize_matrices(&matrix_first, &matrix_second, &matrix_result,
@@ -159,13 +159,13 @@ int main(void)
 				&local_work_size, NULL);
 
 			local_work_size = std::min(local_work_size, global_work_size);
-
+			std::cout << local_work_size << std::endl;
 			auto start = std::chrono::steady_clock::now();
 			err_code = clEnqueueNDRangeKernel(command_queue[j], kernel, 1, NULL, &global_work_size,
 				 				   &local_work_size, 0, NULL, NULL);
-			err_code = clFinish(command_queue[j]);
+			err_code_finish = clFinish(command_queue[j]);
 			auto end = std::chrono::steady_clock::now();
-			if (err_code != CL_SUCCESS)
+			if (err_code != CL_SUCCESS || err_code_finish != CL_SUCCESS)
 				goto release_command_queue;
 
 			elapsed_seconds_matrix_mul = end - start;
@@ -179,9 +179,9 @@ int main(void)
 			start = std::chrono::steady_clock::now();
 			err_code = clEnqueueNDRangeKernel(command_queue[j], kernel_transpose, 1, NULL, &global_work_size,
 				&local_work_size, 0, NULL, NULL);
-			err_code = clFinish(command_queue[j]);
+			err_code_finish = clFinish(command_queue[j]);
 			end = std::chrono::steady_clock::now();
-			if (err_code != CL_SUCCESS)
+			if (err_code != CL_SUCCESS || err_code_finish != CL_SUCCESS)
 				goto release_command_queue;
 
 			elapsed_seconds_matrix_trans = end - start;
@@ -238,7 +238,10 @@ free_all:
 	free(file_buffer_mult);
 	free(matrix_transpose_res);
 	free(file_buffer_transpose);
-	std::cerr << handle_errors(err_code) << std::endl;
+	if(err_code_finish != CL_SUCCESS)
+		std::cerr << handle_errors(err_code_finish) << std::endl;
+	if (err_code != CL_SUCCESS)
+		std::cerr << handle_errors(err_code) << std::endl;
 	return err_code;
 }
 
