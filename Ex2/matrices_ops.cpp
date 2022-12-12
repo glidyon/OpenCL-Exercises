@@ -2,7 +2,8 @@
 #include "matrices_ops.h"
 
 void initialize_matrices(int** matrix_first, int** matrix_second, int** matrix_result,
-						 int* width_first, int* height_first, int* width_second,
+						 int **matrix_transpose_res, int* width_first,
+						 int* height_first, int* width_second,
 						 int* height_second)
 {
 	std::cout << "Enter width of the first matrix: " << std::endl;
@@ -11,6 +12,7 @@ void initialize_matrices(int** matrix_first, int** matrix_second, int** matrix_r
 	std::cin >> *height_first;
 
 	*matrix_first = (int*)malloc(sizeof(int) * (*width_first * *height_first));
+	*matrix_transpose_res = (int*)malloc(sizeof(int) * (*width_first * *height_first));;
 
 	std::cout << "Enter width of the second matrix: " << std::endl;
 	std::cin >> *width_second;
@@ -21,6 +23,12 @@ void initialize_matrices(int** matrix_first, int** matrix_second, int** matrix_r
 	*matrix_result = (int*)malloc(sizeof(int) * (*width_second * *height_first));
 
 	randomize_matrix(*matrix_first, height_first, width_first);
+	//for (int i = 0; i < *height_first; i++) {
+	//	for (int j = 0; j < *width_first; j++) {
+	//		std::cout << (*matrix_first)[j + i * (*width_first)] << " ";
+	//	}
+	//	std::cout << std::endl;
+	//}
 	randomize_matrix(*matrix_second, height_second, width_second);
 }
 

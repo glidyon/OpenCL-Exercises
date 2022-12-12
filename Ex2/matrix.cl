@@ -1,7 +1,7 @@
-__kernel void matrix(__global int *matrix1, __global int *matrix2, __global int *matrix_res
-					 __global int height_second, __global int width_first, __global int width_second) {
-	int i = get_global_id(0);
-	int j = get_global_id(1);
+__kernel void matrix_mul(__global int *matrix1, __global int *matrix2, __global int *matrix_res,
+					 int height_second, int width_first, int width_second) {
+	int i = get_global_id(0) / width_first;
+	int j = get_global_id(0) % width_second;
 
 	int sum = 0;
 	for(int k = 0; k < height_second; k++)
