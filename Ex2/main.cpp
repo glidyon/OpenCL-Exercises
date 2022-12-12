@@ -49,13 +49,16 @@ int main(void)
 
 	clGetPlatformIDs(0, NULL, &num_platforms);
 	platforms_arr = (cl_platform_id*)malloc(sizeof(cl_platform_id) * num_platforms);
-	clGetPlatformIDs(num_platforms, platforms_arr, NULL);
+	err_code = clGetPlatformIDs(num_platforms, platforms_arr, NULL);
+	if (err_code != CL_SUCCESS)
+		goto free_all;
 	
 	for (int i = 0; i < num_platforms; i++) {
 
-		err_code = clGetDeviceIDs(platforms_arr[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
+		clGetDeviceIDs(platforms_arr[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
 		devices_arr = (cl_device_id*)malloc(sizeof(cl_device_id) * num_devices);
 		command_queue = (cl_command_queue*)malloc(sizeof(cl_command_queue) * num_devices);
+
 		err_code = clGetDeviceIDs(platforms_arr[i], CL_DEVICE_TYPE_ALL, num_devices, devices_arr, 0);
 		if (err_code != CL_SUCCESS)
 			goto release_devices;

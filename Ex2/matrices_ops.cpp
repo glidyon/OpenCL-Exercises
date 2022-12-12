@@ -23,12 +23,6 @@ void initialize_matrices(int** matrix_first, int** matrix_second, int** matrix_r
 	*matrix_result = (int*)malloc(sizeof(int) * (*width_second * *height_first));
 
 	randomize_matrix(*matrix_first, height_first, width_first);
-	//for (int i = 0; i < *height_first; i++) {
-	//	for (int j = 0; j < *width_first; j++) {
-	//		std::cout << (*matrix_first)[j + i * (*width_first)] << " ";
-	//	}
-	//	std::cout << std::endl;
-	//}
 	randomize_matrix(*matrix_second, height_second, width_second);
 }
 
