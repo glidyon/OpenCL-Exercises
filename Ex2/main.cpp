@@ -159,7 +159,7 @@ int main(void)
 				&local_work_size, NULL);
 
 			local_work_size = std::min(local_work_size, global_work_size);
-			std::cout << local_work_size << std::endl;
+
 			auto start = std::chrono::steady_clock::now();
 			err_code = clEnqueueNDRangeKernel(command_queue[j], kernel, 1, NULL, &global_work_size,
 				 				   &local_work_size, 0, NULL, NULL);
